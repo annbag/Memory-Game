@@ -7,6 +7,11 @@ let cards = document.querySelectorAll('div'); //All, poniewąz chcemy pobrać ws
 cards = [...cards]; // zamiana NodeList na tablicę
 //console.log(cards);
 //console.log(cards instanceof Array)
+
+const startTime = new Date().getTime(); //pobranie aktualnej daty w ms
+
+
+
 const clickCard = function(){};
 const init = function() {
 	//forEach wykonuje funkcję raz dla każdego card(elementu tablicy)
