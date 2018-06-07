@@ -10,9 +10,67 @@ cards = [...cards]; // zamiana NodeList na tablicę
 
 const startTime = new Date().getTime(); //pobranie aktualnej daty w ms
 
+let activeCard = ''; // która karta została kliknięta
+const activeCards = []; //tablica dla dwóch kart
+//ile par w grze, potrzbne do zakończenia
+const gamePairs = cards.length/2; 
+//informacja o wyniku
+let gameResult = 0;
 
 
-const clickCard = function(){};
+
+const clickCard = function(){
+	activeCard = this; 
+
+	//ukrycie karty, która została kliknięta
+	activeCard.classList.remove('hidden');
+	//sprawdzenie czy to 1 kliknięcie, 
+	if(activeCards.length === 0) {
+		activeCards[0] = activeCard; //przypisanie tego co zostało klinięte
+		return;
+	} 
+	//sprawdzenie czy to drugie kliknięcie
+	else {
+		cards.forEach(card => {
+			card.removeEventListener('click', clickCard)
+		})
+		activeCards[1] = activeCard; //ustawienie drugiego kliknięcia w tablicy w indeksie 1
+		
+		//pół sekundy obie karty są odsłonięte, poźniej decyzja czy dobrze czy źle
+		setTimeout(function(){
+			//po drugim kliknięciu zawsze mozemy sprawdzić czy wygraliśmy-wygrana
+			if(activeCards[0].className === activeCards[1].className) {
+				console.log('wygrana')
+				//nadanie klasy off
+				activeCards.forEach(card => card.classList.add('off'))
+				gameResult++;
+				//sprawdznie czy nastąpi koniec gry
+				if(gameResult == gamePairs) {
+					const endTime = new Date().getTime();
+					const gameTime = (endTime - startTime)/1000;
+					alert(`Udało się! Twój wynik to: ${gameTime} sekund`)
+					//odświeżenie strony, gra od nowa
+					location.reload();
+				}
+
+			}
+			//przegrana, ponowne ukrycie kart
+			else {
+				console.log('przegrana')
+				//nadanie kalsy hidden
+				activeCards.forEach(card => card.classList.add('hidden'))
+			}
+			//po każdych dwóch kliknięciach, reset elementów do stanu wyjsciowego 
+			activeCard= '';
+			activeCards.length = 0;
+			//ponownie nadajemy nasłuchiwanie, aby można była ponownie kliknąć 
+			cards.forEach(card => card.addEventListener('click', clickCard))
+		}, 500)
+
+	}
+
+};
+
 const init = function() {
 	//forEach wykonuje funkcję raz dla każdego card(elementu tablicy)
 	cards.forEach(function(card){
