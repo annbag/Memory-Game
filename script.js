@@ -21,7 +21,8 @@ let gameResult = 0;
 
 const clickCard = function(){
 	activeCard = this; 
-
+	//jesli bedzie dokładnie ten sam element, zakończenie funkcji, nic sie nie dzieje
+	if(activeCard == activeCards[0]) return;
 	//ukrycie karty, która została kliknięta
 	activeCard.classList.remove('hidden');
 	//sprawdzenie czy to 1 kliknięcie, 
@@ -44,6 +45,10 @@ const clickCard = function(){
 				//nadanie klasy off
 				activeCards.forEach(card => card.classList.add('off'))
 				gameResult++;
+				// trzeba usunąc dwa divy, które są juz wygrane
+				//filter robi coś na każdym elemencie,
+				//contains sprawdza czy off występuje, jęsli występuje to true jesli nie to false, my mamy odwrtoność
+				cards = cards.filter(card => !card.classList.contains('off'))
 				//sprawdznie czy nastąpi koniec gry
 				if(gameResult == gamePairs) {
 					const endTime = new Date().getTime();
